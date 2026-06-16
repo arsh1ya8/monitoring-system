@@ -1,0 +1,47 @@
+groups:
+  - name: infrastructure-alerts
+    rules:
+      - alert: HighCPUUsage
+        expr: app_cpu_usage_percent > 85
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU is at {{ $value }}%"
+
+      - alert: CriticalCPUUsage
+        expr: app_cpu_usage_percent > 95
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical CPU usage"
+          description: "CPU is at {{ $value }}%"
+
+      - alert: HighMemoryUsage
+        expr: app_memory_usage_percent > 80
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage"
+          description: "Memory is at {{ $value }}%"
+
+      - alert: HighDiskUsage
+        expr: app_disk_usage_percent > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High disk usage"
+          description: "Disk is at {{ $value }}%"
+
+      - alert: AppDown
+        expr: up{job="monitoring-app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Monitoring app is down"
+          description: "The FastAPI app has been unreachable for 1 minute"
