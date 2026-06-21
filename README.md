@@ -1,83 +1,48 @@
-markdown# Cloud Infrastructure Monitoring & Incident Management System
+﻿# Cloud Infrastructure Monitoring & Incident Management System
 
-A production-style infrastructure monitoring system built with Python, Docker, and open-source DevOps tools. Monitors CPU, memory, disk, and database health in real-time with automatic incident detection and alerting.
+A full-stack cloud-native monitoring system that tracks CPU, memory, and disk metrics in real time, automatically creates incidents when thresholds are breached, and displays everything on a live dashboard.
 
-## What This Project Does
-- Monitors CPU, memory, and disk usage in real-time
-- Automatically detects threshold breaches and creates incidents
-- Stores incident history in a SQL Server database
-- Visualizes metrics in Grafana dashboards
-- Exposes metrics to Prometheus for time-series storage
-- CI/CD pipeline via GitHub Actions
+## Stage 1 - Local Stack (Complete)
 
-## Tech Stack
+### Tech Stack
+- Python FastAPI
+- SQL Server (pymssql)
+- Prometheus
+- Grafana
+- Docker Compose
+- GitHub Actions CI/CD
 
-| Technology | Purpose |
-|---|---|
-| Python FastAPI | REST API and monitoring application |
-| Docker & Docker Compose | Containerization and orchestration |
-| SQL Server | Incident and metrics storage |
-| Prometheus | Metrics collection and alerting |
-| Grafana | Real-time dashboards and visualization |
-| GitHub Actions | CI/CD pipeline |
+### Screenshots
+![Dashboard](screenshots/infrastructure%20monitoring%20snapshot%20dashboard%20.jpg)
+![Grafana](screenshots/infrastructure%20monitoring%20snapshot%20grafana%20.jpg)
+![Prometheus](screenshots/infrastructure%20monitoring%20snapshot%20prometheus%20-%20Graph%20.jpg)
+![GitHub Actions](screenshots/infrastructure%20monitoring%20snapshot%20github%20actions%20.jpg)
 
-## Getting Started
+## Stage 2 - Azure AKS Deployment (Complete)
 
-### Prerequisites
-- Docker Desktop
-- WSL2 (Windows) or Linux/Mac
+### Tech Stack
+- Microsoft Azure
+- Azure AKS (Kubernetes)
+- Azure Container Registry
+- Terraform (IaC)
+- kubectl
 
-### Run Locally
+### Live URLs
+- Dashboard: http://48.211.151.56/dashboard
+- Grafana: http://20.72.78.164
 
-1. Clone the repo
-```bash
-git clone https://github.com/arsh1ya8/monitoring-system.git
-cd monitoring-system
-```
+### What Terraform Provisions
+- Azure Resource Group (monitoring-rg)
+- AKS Cluster (monitoring-aks) - East US 2 - Standard_D2s_v3
+- Azure Container Registry (monitoringregistry2024)
 
-2. Create .env file
-DB_PASSWORD=YourStrongPassword123!
-GRAFANA_PASSWORD=admin123
+### Kubernetes Resources
+- 4 Deployments: monitoring-app, sqlserver, prometheus, grafana
+- 2 LoadBalancer Services (app + grafana)
+- 2 ClusterIP Services (prometheus + sqlserver)
+- 1 PersistentVolumeClaim: 5Gi for SQL Server
 
-3. Start all services
-```bash
-docker compose up --build -d
-```
-
-4. Create the database
-```bash
-docker exec -it monitoring-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrongPassword123!" -No -Q "CREATE DATABASE monitoringdb"
-```
-
-5. Restart the app
-```bash
-docker restart monitoring-app
-```
-
-## Access the Services
-
-| Service | URL |
-|---|---|
-| Monitoring Dashboard | http://localhost:8000/dashboard |
-| API Documentation | http://localhost:8000/docs |
-| Prometheus | http://localhost:9090 |
-| Grafana | http://localhost:3000 |
-
-## Alert Thresholds
-
-| Metric | Warning | Critical |
-|---|---|---|
-| CPU | 75% | 90% |
-| Memory | 80% | 95% |
-| Disk | 85% | 95% |
-
-## CI/CD Pipeline
-GitHub Actions automatically runs on every push:
-1. Installs Python dependencies
-2. Runs import tests
-3. Builds Docker image
-
-## Stage 2 (Coming Soon)
-- Kubernetes deployment (AKS)
-- Terraform infrastructure as code
-- Azure cloud hosting
+### Screenshots
+![AKS Dashboard](screenshots/stage%202%20infrastructure%20monitoring%20dashboard%20on%20cloud.jpg)
+![Grafana on AKS](screenshots/stage%202%20infrastructure%20monitoring%20snapshot%20grafana%20.jpg)
+![Azure Resources](screenshots/stage%202%20infrastructure%20monitoring%20azure%20resource%20.jpg)
