@@ -1,4 +1,4 @@
-import time
+﻿import time
 import logging
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from database import get_db, check_db_connection, engine
+from database import get_db, check_db_connection, engine, wait_for_db
 from models import Base
 from metrics import collect_metrics, check_thresholds, get_prometheus_metrics, request_counter
 from incidents import create_incident, resolve_incident, get_all_incidents, save_metric_snapshot
@@ -52,6 +52,8 @@ def monitoring_job():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting monitoring system...")
+    logger.info("Waiting for database to be ready...")
+    wait_for_db(retries=15, delay=5)
     Base.metadata.create_all(bind=engine)
     logger.info("Database tables ready")
     monitoring_job()

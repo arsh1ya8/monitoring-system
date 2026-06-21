@@ -1,0 +1,40 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring-app
+  template:
+    metadata:
+      labels:
+        app: monitoring-app
+    spec:
+      containers:
+      - name: monitoring-app
+        image: monitoringregistry2024.azurecr.io/monitoring-app:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_SERVER
+          value: "sqlserver-service"
+        - name: DB_NAME
+          value: "monitoringdb"
+        - name: DB_USER
+          value: "sa"
+        - name: DB_PASSWORD
+          value: "YourStrong@Passw0rd"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-app-service
+spec:
+  selector:
+    app: monitoring-app
+  ports:
+  - port: 80
+    targetPort: 8000
+  type: LoadBalancer
